@@ -1,0 +1,94 @@
+class Bill:
+
+    def __init__(self, amount):
+        if amount < 0:
+            raise ValueError
+        self._amount = amount
+
+    def __str__(self):
+        return "A {}$ bill".format(self._amount)
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __hash__(self):
+        return hash(self._amount)
+
+    def __eq__(self, other):
+        return self._amount == other._amount
+
+    def __int__(self):
+        return self._amount
+
+    def total(self):
+        return self._amount
+
+    def get_amount(self):
+        return self._amount
+
+
+class BatchBill:
+
+    def __init__(self, bills):
+        self._bills = bills
+
+    def __len__(self):
+        return len(self._bills)
+
+    def __getitem__(self, index):
+        return self._bills[index]
+
+    def __int__(self):
+        return sum([bill.get_amount() for bill in self._bills])
+
+    def total(self):
+        return int(self)
+
+
+class CashDesk:
+    def __init__(self):
+        self.cash = []
+        self.divbills = {
+            5: 0,
+            10: 0,
+            15: 0,
+            20: 0,
+            50: 0,
+            100: 0
+        }
+
+    def take_money(self, amount):
+        self.cash.append(amount)
+
+    def total(self):
+        return sum([obj.total() for obj in self.cash])
+
+    def inspect(self):
+        total = 0
+        for money_pile in self.cash:
+            if isinstance(money_pile, BatchBill):
+                for bill in money_pile:
+                    if int(bill._amount) in self.divbills:
+                        self.divbills[int(bill.get_amount())] += 1
+            else:
+                self.divbills[int(money_pile.get_amount())] += 1
+        for bill_value in self.divbills:
+            total += int(bill_value)*self.divbills[bill_value]
+        message = 'We have a total of {}$ in the desk\n'.format(total)
+        message += 'We have the following count of bills, sorted in ascending order:'
+        for bill_value in sorted(self.divbills.keys()):
+            if self.divbills[bill_value]:
+                message += '\n{}$ bills - {}'.format(bill_value, self.divbills[bill_value])
+        return message
+
+
+values = [10, 20, 50, 5]
+bills = [Bill(value) for value in values]
+
+batch = BatchBill(bills)
+
+desk = CashDesk()
+
+desk.take_money(batch)
+desk.take_money(Bill(10))
+print(desk.inspect())

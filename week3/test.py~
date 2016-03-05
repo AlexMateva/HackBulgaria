@@ -1,0 +1,9 @@
+from cashDesk import Bill
+
+a = Bill(10)
+b = Bill(5)
+c = Bill(10)
+
+int(a)
+str(a)
+print(a)
