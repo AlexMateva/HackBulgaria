@@ -24,22 +24,22 @@ class Fraction:
         return self.__str__()
 
     def __add__(self, other):
-        self.numerator = self.numerator * other.denominator + self.denominator * other.numerator
-        self.denominator = self.denominator * other.denominator
-        return self._cancel_fraction()
+        num = self.numerator * other.denominator + self.denominator * other.numerator
+        denom = self.denominator * other.denominator
+        return Fraction(num, denom)._cancel_fraction()
 
     def __sub__(self, other):
         if self._cancel_fraction() == other._cancel_fraction():
             return 0
         else:
-            self.numerator = self.numerator * other.denominator - self.denominator * other.numerator
-            self.denominator = self.denominator * other.denominator
-            return self._cancel_fraction()
+            num = self.numerator * other.denominator - self.denominator * other.numerator
+            denom = self.denominator * other.denominator
+            return Fraction(num, denom)._cancel_fraction()
 
     def __mul__(self, other):
-        self.numerator = self.numerator * other.numerator
-        self.denominator = self.denominator * other.denominator
-        return self._cancel_fraction()
+        num = self.numerator * other.numerator
+        denom = self.denominator * other.denominator
+        return Fraction(num, denom)._cancel_fraction()
 
     def __eq__(self, other):
         return self._cancel_fraction() == other._cancel_fraction()
